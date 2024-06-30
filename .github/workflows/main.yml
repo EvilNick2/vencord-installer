@@ -1,0 +1,42 @@
+name: Create Version Tag and Release
+
+on:
+  push:
+    branches:
+      - main  # Adjust this to your branch
+
+jobs:
+  create-tag-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Extract version from vencord.sh
+        id: get_version
+        run: |
+          VERSION=$(grep 'currentVersion=' vencord.sh | cut -d '"' -f 2)
+          echo "Extracted version: $VERSION"
+          echo "::set-output name=VERSION::$VERSION"
+      
+      - name: Configure Git
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+      
+      - name: Create and Push Tag
+        run: |
+          TAG="v${{ steps.get_version.outputs.VERSION }}"
+          git tag $TAG
+          git push origin $TAG
+
+      - name: Create Release and Upload Asset
+        uses: softprops/action-gh-release@v1
+        with:
+          files: vencord.sh
+          tag_name: ${{ steps.get_version.outputs.VERSION }}
+          name: Release ${{ steps.get_version.outputs.VERSION }}
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
