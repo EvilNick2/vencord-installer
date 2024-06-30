@@ -1,6 +1,6 @@
 #!/bin/bash
 
-currentVersion="1.0.0"
+currentVersion="1.0.1"
 
 declare default="\033[1;0m"
 declare yellow="\033[1;33m"
