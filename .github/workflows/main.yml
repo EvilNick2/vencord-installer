@@ -17,7 +17,7 @@ jobs:
         run: |
           VERSION=$(grep 'currentVersion=' vencord.sh | cut -d '"' -f 2)
           echo "Extracted version: $VERSION"
-          echo "::set-output name=VERSION::$VERSION"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
       
       - name: Configure Git
         run: |
@@ -26,7 +26,7 @@ jobs:
       
       - name: Create and Push Tag
         run: |
-          TAG="v${{ steps.get_version.outputs.VERSION }}"
+          TAG="v${VERSION}"
           git tag $TAG
           git push origin $TAG
 
@@ -34,8 +34,8 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: vencord.sh
-          tag_name: ${{ steps.get_version.outputs.VERSION }}
-          name: ${{ steps.get_version.outputs.VERSION }}
+          tag_name: ${{ env.VERSION }}
+          name: ${{ env.VERSION }}
           draft: false
           prerelease: false
         env:
