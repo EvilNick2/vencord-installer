@@ -1,6 +1,6 @@
 #!/bin/bash
 
-currentVersion="1.0.7"
+currentVersion="1.0.8"
 
 OS="$(uname -s)"
 case "$OS" in
@@ -110,6 +110,24 @@ installVencord() {
 	pnpm build
 }
 
+downloadThemes() {
+    declare themesRepo=(
+        https://raw.githubusercontent.com/EvilNick2/vencord/main/themes/Spotify-Discord-Nick.theme.css
+    )
+
+    themesDir="$APPDATA/Vencord/themes"
+
+    for theme in ${themesRepo[@]}; do
+        echo -e "${yellow}\n=================================="
+        echo -e " Downloading ${theme} "
+        echo -e "==================================${default}"
+        sleep 1
+        mkdir -p "$themesDir"
+        filename=$(basename "$theme")
+        curl -o "$themesDir/$filename" -sS "$theme"
+    done
+}
+
 killProcess() {
     processName="Discord*"
 
@@ -133,6 +151,7 @@ main() {
 			echo -en "${green}\nReinstalling Vencord!""\n${default}"
 			rm -rf "$installDir\Vencord"
 			installVencord
+			downloadThemes
 		else
 			echo -e "${red}\nExiting.${default}"
 		fi
