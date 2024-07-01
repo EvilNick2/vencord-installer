@@ -1,6 +1,15 @@
 #!/bin/bash
 
-currentVersion="1.0.4"
+currentVersion="1.0.5"
+
+OS="$(uname -s)"
+case "$OS" in
+    Linux*)     os="Linux";;
+    CYGWIN*)    os="Cygwin";;
+    MINGW*)     os="MinGw";;
+    *)          os="UNKNOWN:${OS}"
+esac
+
 
 declare default="\033[1;0m"
 declare yellow="\033[1;33m"
@@ -18,7 +27,14 @@ checkAndUpdateScript() {
     latestRelease=$(curl -s "https://api.github.com/repos/$GITHUB_USER/$GITHUB_REPO/releases/latest")
 
     latestVersion=$(echo "$latestRelease" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
-    downloadUrl=$(echo "$latestRelease" | grep '"browser_download_url":' | grep "$SCRIPT_NAME" | sed -E 's/.*"([^"]+)".*/\1/')
+	if [ "$os" = "Linux" ]; then
+		downloadUrl=$(echo "$latestRelease" | grep '"browser_download_url":' | grep "linux_$SCRIPT_NAME" | sed -E 's/.*"([^"]+)".*/\1/')
+	elif [[ "$os" = "Cygwin" || "$os" = "MinGw" ]]; then
+		downloadUrl=$(echo "$latestRelease" | grep '"browser_download_url":' | grep "windows_$SCRIPT_NAME" | sed -E 's/.*"([^"]+)".*/\1/')
+	else
+		echo "Unsupported OS"
+		exit 1
+	fi
 
     if [ ! -z "$latestVersion" ] && [ ! -z "$downloadUrl" ] && [ "$latestVersion" != "$currentVersion" ]; then
         echo -e "${yellow}New version available: $latestVersion. Updating...${default}"
@@ -33,11 +49,11 @@ checkAndUpdateScript() {
         echo -e "${green}Update complete. Please rerun the script.${default}"
         echo -en "${green}Press enter to exit"'!\n'"${default}"
 
-				# pause execution
-				read -p "" opt
-				case $opt in
-					* ) exit;;
-				esac
+		# pause execution
+		read -p "" opt
+		case $opt in
+			* ) exit;;
+		esac
     else
         echo -e "${green}You are running the latest version (${currentVersion}).${default}"
     fi
@@ -83,11 +99,11 @@ installVencord() {
 	git clone -q https://github.com/Vendicated/Vencord.git
 	cd Vencord
 
-	npm i -g pnpm
-	pnpm install
+	sudo npm i -g pnpm
+	sudo pnpm install
 	pnpm build
 
-	pnpm inject
+	sudo pnpm inject
 
 	cd src
 	mkdir userplugins
@@ -99,18 +115,17 @@ installVencord() {
 killProcess() {
     processName="Discord*"
 
-    powershell.exe -Command "& {Get-Process -Name $processName -ErrorAction SilentlyContinue | Stop-Process}"
+	echo -e "${yellow}\nKilling any found discord processes.${default}"
+	pkill -f $processName
 }
 
 main() {
-	declare installDir="$USERPROFILE\Documents"
-
-	echo -e "${yellow}\nKilling any found discord processes.${default}"
 	killProcess
-	
+
+	declare installDir="$HOME/Documents"
 	cd $installDir
 
-	if [ -d "$installDir\Vencord" ]; then
+	if [ -d "$installDir/Vencord" ]; then
 		echo -en "${red}Vencord folder already exists. Do you wish to reinstall? (Y/N)? ${default}"
 		old_stty_cfg=$(stty -g)
 		stty raw -echo
@@ -118,7 +133,7 @@ main() {
 		stty $old_stty_cfg
 		if [ "$answer" != "${answer#[Yy]}" ];then
 			echo -en "${green}\nReinstalling Vencord!""\n${default}"
-			rm -rf "$installDir\Vencord"
+			sudo rm -rf "$installDir/Vencord"
 			installVencord
 		else
 			echo -e "${red}\nExiting.${default}"
