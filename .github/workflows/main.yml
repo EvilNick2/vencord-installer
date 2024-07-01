@@ -15,7 +15,7 @@ jobs:
       - name: Extract version from vencord.sh
         id: get_version
         run: |
-          VERSION=$(grep 'currentVersion=' vencord.sh | cut -d '"' -f 2)
+          VERSION=$(grep 'currentVersion=' windows_vencord.sh | cut -d '"' -f 2)
           echo "Extracted version: $VERSION"
           echo "VERSION=$VERSION" >> $GITHUB_ENV
       
