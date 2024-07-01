@@ -1,6 +1,6 @@
 #!/bin/bash
 
-currentVersion="1.0.2"
+currentVersion="1.0.3"
 
 declare default="\033[1;0m"
 declare yellow="\033[1;33m"
@@ -90,13 +90,22 @@ installVencord() {
 	pnpm build
 }
 
+killProcess() {
+    processName="Discord*"
+
+    powershell.exe -Command "& {Get-Process -Name $processName -ErrorAction SilentlyContinue | Stop-Process}"
+}
+
 main() {
 	declare installDir="$USERPROFILE\Documents"
+
+	echo -e "${yellow}\nKilling any found discord processes.${default}"
+	killProcess
 	
 	cd $installDir
 
 	if [ -d "$installDir\Vencord" ]; then
-		echo -en "${red}\nVencord folder already exists. Do you wish to reinstall? (Y/N)? ${default}"
+		echo -en "${red}Vencord folder already exists. Do you wish to reinstall? (Y/N)? ${default}"
 		old_stty_cfg=$(stty -g)
 		stty raw -echo
 		answer=$( while ! head -c 1 | grep -i '[ny]' ;do true ;done )
@@ -106,7 +115,7 @@ main() {
 			rm -rf "$installDir\Vencord"
 			installVencord
 		else
-			echo -e "\nExiting."
+			echo -e "${red}\nExiting.${default}"
 		fi
 	else
 		installVencord
@@ -114,7 +123,7 @@ main() {
 
 	echo -e "${green}\nALL DONE! :)${default}"
 	echo -en "${green}Press enter to exit"'!\n'"${default}"
-	echo -en "${green}You can now relaunch discord.\n${default}"
+	echo -en "${green}You can now relaunch discord.${default}"
 	
 	# pause execution
 	read -p "" opt
