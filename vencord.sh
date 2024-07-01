@@ -1,6 +1,6 @@
 #!/bin/bash
 
-currentVersion="1.0.3"
+currentVersion="1.0.4"
 
 declare default="\033[1;0m"
 declare yellow="\033[1;33m"
@@ -31,7 +31,13 @@ checkAndUpdateScript() {
         mv "$tempScript" "$SCRIPT_NAME"
 
         echo -e "${green}Update complete. Please rerun the script.${default}"
-        exit 0
+        echo -en "${green}Press enter to exit"'!\n'"${default}"
+
+				# pause execution
+				read -p "" opt
+				case $opt in
+					* ) exit;;
+				esac
     else
         echo -e "${green}You are running the latest version (${currentVersion}).${default}"
     fi
@@ -130,7 +136,6 @@ main() {
 	case $opt in
 		* ) exit;;
 	esac
-
 }
 
 echo -e "This file will download Vencord with custom userplugins. Vencord is against Discord TOS, but is rarely enforced."
