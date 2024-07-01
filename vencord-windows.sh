@@ -1,14 +1,15 @@
 #!/bin/bash
 
-currentVersion="1.0.5"
+currentVersion="1.0.6"
 
 OS="$(uname -s)"
 case "$OS" in
-    Linux*)     os="Linux";;
-    CYGWIN*)    os="Cygwin";;
-    MINGW*)     os="MinGw";;
+    Linux*)     os="linux";;
+    CYGWIN*)    os="windows";;
+    MINGW*)     os="windows";;
     *)          os="UNKNOWN:${OS}"
 esac
+
 
 declare default="\033[1;0m"
 declare yellow="\033[1;33m"
@@ -18,7 +19,7 @@ declare red="\033[1;31m"
 
 GITHUB_USER="EvilNick2"
 GITHUB_REPO="vencord-installer"
-SCRIPT_NAME="vencord.sh"
+SCRIPT_NAME="vencord-${os}.sh"
 
 checkAndUpdateScript() {
     echo -e "${cyan}Checking for updates...${default}"
@@ -26,17 +27,15 @@ checkAndUpdateScript() {
     latestRelease=$(curl -s "https://api.github.com/repos/$GITHUB_USER/$GITHUB_REPO/releases/latest")
 
     latestVersion=$(echo "$latestRelease" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
-	if [ "$os" = "Linux" ]; then
-		downloadUrl=$(echo "$latestRelease" | grep '"browser_download_url":' | grep "linux_$SCRIPT_NAME" | sed -E 's/.*"([^"]+)".*/\1/')
-	elif [[ "$os" = "Cygwin" || "$os" = "MinGw" ]]; then
-		downloadUrl=$(echo "$latestRelease" | grep '"browser_download_url":' | grep "windows_$SCRIPT_NAME" | sed -E 's/.*"([^"]+)".*/\1/')
+	if [ "$os" = "linux" || "$os" = "windows" ]; then
+		downloadUrl=$(echo "$latestRelease" | grep '"browser_download_url":' | grep "$SCRIPT_NAME" | sed -E 's/.*"([^"]+)".*/\1/')
 	else
 		echo "Unsupported OS"
 		exit 1
 	fi
 
     if [ ! -z "$latestVersion" ] && [ ! -z "$downloadUrl" ] && [ "$latestVersion" != "$currentVersion" ]; then
-        echo -e "${yellow}New version available: $latestVersion. Updating...${default}"
+        echo -e "${yellow}New version available: $latestVersion-$os. Updating...${default}"
 
         tempScript="temp_$SCRIPT_NAME"
         curl -Lo "$tempScript" "$downloadUrl"

@@ -15,7 +15,7 @@ jobs:
       - name: Extract version from vencord.sh
         id: get_version
         run: |
-          VERSION=$(grep 'currentVersion=' windows_vencord.sh | cut -d '"' -f 2)
+          VERSION=$(grep 'currentVersion=' vencord-windows.sh | cut -d '"' -f 2)
           echo "Extracted version: $VERSION"
           echo "VERSION=$VERSION" >> $GITHUB_ENV
       
@@ -34,8 +34,8 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            windows_vencord.sh
-            linux_vencord.sh
+            vencord-windows.sh
+            vencord-linux.sh
           tag_name: ${{ env.VERSION }}
           name: ${{ env.VERSION }}
           draft: false
