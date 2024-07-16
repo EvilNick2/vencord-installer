@@ -1,6 +1,6 @@
 #!/bin/bash
 
-currentVersion="1.0.8"
+currentVersion="1.0.9"
 
 OS="$(uname -s)"
 case "$OS" in
@@ -61,7 +61,6 @@ checkAndUpdateScript
 
 downloadPlugins() {
 	declare userpluginsRepo=(
-		https://github.com/D3SOX/vencord-userplugins
 		https://github.com/ImpishMoxxie/SoundBoardLogger
 		https://github.com/pernydev/DontLeak
 		https://github.com/nyakowint/vcNarrator-custom
@@ -69,6 +68,15 @@ downloadPlugins() {
 		https://github.com/ethan-davies/ToastNotificationsMerge/
 		https://github.com/nyakowint/replaceActivityTypes
 		https://github.com/Syncxv/vc-message-logger-enhanced
+		https://github.com/D3SOX/vc-betterActivities
+		https://github.com/D3SOX/vc-blockKrisp
+		https://github.com/D3SOX/vc-followUser
+		https://github.com/D3SOX/vc-ignoreTerms
+		https://github.com/D3SOX/vc-mediaPlaybackSpeed
+		https://github.com/D3SOX/vc-notifyUserChanges
+		https://github.com/D3SOX/vc-serverProfilesToolbox
+		https://github.com/D3SOX/vc-silentTypingEnhanced
+		https://github.com/D3SOX/vc-voiceChatUtilities
 	)
 
 	for pkg in ${userpluginsRepo[@]}; do
