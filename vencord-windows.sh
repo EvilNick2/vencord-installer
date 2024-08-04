@@ -1,6 +1,6 @@
 #!/bin/bash
 
-currentVersion="1.0.9"
+currentVersion="1.1.0"
 
 OS="$(uname -s)"
 case "$OS" in
@@ -20,6 +20,11 @@ declare red="\033[1;31m"
 GITHUB_USER="EvilNick2"
 GITHUB_REPO="vencord-installer"
 SCRIPT_NAME="vencord-${os}.sh"
+
+processName="Discord*"
+processPath=""
+process_path_file="killed_process_path.txt"
+absolutePath=""
 
 checkAndUpdateScript() {
     echo -e "${cyan}Checking for updates...${default}"
@@ -102,7 +107,7 @@ downloadPlugins() {
 }
 
 installVencord() {
-	git clone -q https://github.com/Vendicated/Vencord.git
+	git clone https://github.com/Vendicated/Vencord.git
 	cd Vencord
 
 	npm i -g pnpm
@@ -137,10 +142,40 @@ downloadThemes() {
 }
 
 killProcess() {
-    processName="Discord*"
+    echo -e "${yellow}\nKilling any found Discord processes.${default}"
 
-	echo -e "${yellow}\nKilling any found discord processes.${default}"
-    powershell.exe -Command "& {Get-Process -Name $processName -ErrorAction SilentlyContinue | Stop-Process}"
+    processNames=("Discord" "DiscordPTB" "DiscordCanary")
+
+    absolutePath=$(pwd)/$process_path_file
+    > "$absolutePath"
+
+    for processName in "${processNames[@]}"; 
+    do
+        processPath=$(powershell.exe -Command "& {Get-Process -Name $processName -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty Path}")
+
+        if [ -n "$processPath" ]; then
+            echo "$processPath" >> "$absolutePath"
+        fi
+
+        powershell.exe -Command "& {Get-Process -Name $processName -ErrorAction SilentlyContinue | Stop-Process}"
+    done
+}
+
+launchProcess() {
+    absolutePath=$1
+
+    if [ -f "$absolutePath" ]; then
+        while IFS= read -r processPath; do
+            if [ -n "$processPath" ]; then
+                start "$processPath"
+            else
+                echo "Process path is empty."
+            fi
+        done < "$absolutePath"
+        rm "$absolutePath"
+    else
+        echo "Process path file not found."
+    fi
 }
 
 main() {
@@ -169,7 +204,8 @@ main() {
 
 	echo -e "${green}\nALL DONE! :)${default}"
 	echo -en "${green}Press enter to exit"'!\n'"${default}"
-	echo -en "${green}You can now relaunch discord.${default}"
+	echo -en "${green}Launching Discord, if it doesn't automatically open you can launch it manually${default}"
+	launchProcess "$absolutePath"
 	
 	# pause execution
 	read -p "" opt

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-currentVersion="1.0.9"
+currentVersion="1.1.0"
 
 OS="$(uname -s)"
 case "$OS" in
@@ -120,7 +120,7 @@ downloadThemes() {
 }
 
 installVencord() {
-	git clone -q https://github.com/Vendicated/Vencord.git
+	git clone https://github.com/Vendicated/Vencord.git
 	cd Vencord
 
 	sudo npm i -g pnpm
