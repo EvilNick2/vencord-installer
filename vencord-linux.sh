@@ -1,6 +1,6 @@
 #!/bin/bash
 
-currentVersion="1.1.0"
+currentVersion="1.1.1"
 
 OS="$(uname -s)"
 case "$OS" in
@@ -77,6 +77,7 @@ downloadPlugins() {
 		https://github.com/D3SOX/vc-serverProfilesToolbox
 		https://github.com/D3SOX/vc-silentTypingEnhanced
 		https://github.com/D3SOX/vc-voiceChatUtilities
+		https://github.com/hauntii/vencord-steamStatusSync
 	)
 
 	for pkg in ${userpluginsRepo[@]}; do
