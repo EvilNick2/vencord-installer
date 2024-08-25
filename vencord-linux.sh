@@ -1,6 +1,6 @@
 #!/bin/bash
 
-currentVersion="1.1.1"
+currentVersion="1.1.2"
 
 OS="$(uname -s)"
 case "$OS" in
@@ -78,6 +78,7 @@ downloadPlugins() {
 		https://github.com/D3SOX/vc-silentTypingEnhanced
 		https://github.com/D3SOX/vc-voiceChatUtilities
 		https://github.com/hauntii/vencord-steamStatusSync
+		https://github.com/EvilNick2/keyboardSounds.git
 	)
 
 	for pkg in ${userpluginsRepo[@]}; do
@@ -89,7 +90,6 @@ downloadPlugins() {
 	done
 
 	declare userpluginsWget=(
-		https://raw.githubusercontent.com/domi-btnr/Vencord-Plugins/main/Keyboard-Sounds/keyboardSounds.ts
 		https://raw.githubusercontent.com/exhq/uwuifier-vencord/main/uwuifier.ts
 	)
 
