@@ -1,6 +1,6 @@
 #!/bin/bash
 
-currentVersion="1.1.2"
+currentVersion="1.1.3"
 
 OS="$(uname -s)"
 case "$OS" in
@@ -125,7 +125,7 @@ installVencord() {
 	cd Vencord
 
 	sudo npm i -g pnpm
-	sudo pnpm install
+	pnpm install
 	pnpm build
 
 	sudo pnpm inject
