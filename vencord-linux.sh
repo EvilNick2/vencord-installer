@@ -80,7 +80,6 @@ downloadPlugins() {
 		https://github.com/hauntii/vencord-steamStatusSync
 		https://github.com/EvilNick2/keyboardSounds.git
 		https://github.com/fres621/vencord-whos-watching.git
-		https://github.com/hauntii/vencord-steamStatusSync.git
 	)
 
 	for pkg in ${userpluginsRepo[@]}; do

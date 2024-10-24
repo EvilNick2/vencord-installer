@@ -1,6 +1,6 @@
 #!/bin/bash
 
-currentVersion="1.1.4"
+currentVersion="1.1.5"
 
 OS="$(uname -s)"
 case "$OS" in
@@ -85,7 +85,6 @@ downloadPlugins() {
 		https://github.com/hauntii/vencord-steamStatusSync
 		https://github.com/EvilNick2/keyboardSounds.git
 		https://github.com/fres621/vencord-whos-watching.git
-		https://github.com/hauntii/vencord-steamStatusSync.git
 	)
 
 	for pkg in ${userpluginsRepo[@]}; do
