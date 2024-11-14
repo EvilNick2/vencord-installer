@@ -1,13 +1,13 @@
 #!/bin/bash
 
-currentVersion="1.1.5"
+currentVersion="1.1.6"
 
 OS="$(uname -s)"
 case "$OS" in
-    Linux*)     os="linux";;
-    CYGWIN*)    os="windows";;
-    MINGW*)     os="windows";;
-    *)          os="UNKNOWN:${OS}"
+  Linux*)     os="linux";;
+  CYGWIN*)    os="windows";;
+  MINGW*)     os="windows";;
+  *)          os="UNKNOWN:${OS}"
 esac
 
 
@@ -27,11 +27,11 @@ process_path_file="killed_process_path.txt"
 absolutePath=""
 
 checkAndUpdateScript() {
-    echo -e "${cyan}Checking for updates...${default}"
+  echo -e "${cyan}Checking for updates...${default}"
 
-    latestRelease=$(curl -s "https://api.github.com/repos/$GITHUB_USER/$GITHUB_REPO/releases/latest")
+  latestRelease=$(curl -s "https://api.github.com/repos/$GITHUB_USER/$GITHUB_REPO/releases/latest")
 
-    latestVersion=$(echo "$latestRelease" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+  latestVersion=$(echo "$latestRelease" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
 	if [[ "$os" = "linux" || "$os" = "windows" ]]; then
 		downloadUrl=$(echo "$latestRelease" | grep '"browser_download_url":' | grep "$SCRIPT_NAME" | sed -E 's/.*"([^"]+)".*/\1/')
 	else
@@ -39,27 +39,27 @@ checkAndUpdateScript() {
 		exit 1
 	fi
 
-    if [ ! -z "$latestVersion" ] && [ ! -z "$downloadUrl" ] && [ "$latestVersion" != "$currentVersion" ]; then
-        echo -e "${yellow}New version available: $latestVersion-$os. Updating...${default}"
+  if [ ! -z "$latestVersion" ] && [ ! -z "$downloadUrl" ] && [ "$latestVersion" != "$currentVersion" ]; then
+    echo -e "${yellow}New version available: $latestVersion-$os. Updating...${default}"
 
-        tempScript="temp_$SCRIPT_NAME"
-        curl -Lo "$tempScript" "$downloadUrl"
+    tempScript="temp_$SCRIPT_NAME"
+    curl -Lo "$tempScript" "$downloadUrl"
 
-        chmod +x "$tempScript"
+    chmod +x "$tempScript"
 
-        mv "$tempScript" "$SCRIPT_NAME"
+    mv "$tempScript" "$SCRIPT_NAME"
 
-        echo -e "${green}Update complete. Please rerun the script.${default}"
-        echo -en "${green}Press enter to exit"'!\n'"${default}"
+    echo -e "${green}Update complete. Please rerun the script.${default}"
+    echo -en "${green}Press enter to exit"'!\n'"${default}"
 
-		# pause execution
-		read -p "" opt
-		case $opt in
-			* ) exit;;
-		esac
-    else
-        echo -e "${green}You are running the latest version (${currentVersion}).${default}"
-    fi
+  # pause execution
+  read -p "" opt
+  case $opt in
+    * ) exit;;
+  esac
+  else
+    echo -e "${green}You are running the latest version (${currentVersion}).${default}"
+  fi
 }
 
 checkAndUpdateScript
@@ -126,58 +126,58 @@ installVencord() {
 }
 
 downloadThemes() {
-    declare themesRepo=(
-        https://raw.githubusercontent.com/EvilNick2/vencord/main/themes/Spotify-Discord-Nick.theme.css
-    )
+  declare themesRepo=(
+		https://raw.githubusercontent.com/EvilNick2/vencord/main/themes/Spotify-Discord-Nick.theme.css
+  )
 
-    themesDir="$APPDATA/Vencord/themes"
+  themesDir="$APPDATA/Vencord/themes"
 
-    for theme in ${themesRepo[@]}; do
-        echo -e "${yellow}\n=================================="
-        echo -e " Downloading ${theme} "
-        echo -e "==================================${default}"
-        sleep 1
-        mkdir -p "$themesDir"
-        filename=$(basename "$theme")
-        curl -o "$themesDir/$filename" -sS "$theme"
-    done
+  for theme in ${themesRepo[@]}; do
+    echo -e "${yellow}\n=================================="
+    echo -e " Downloading ${theme} "
+    echo -e "==================================${default}"
+    sleep 1
+    mkdir -p "$themesDir"
+    filename=$(basename "$theme")
+    curl -o "$themesDir/$filename" -sS "$theme"
+  done
 }
 
 killProcess() {
-    echo -e "${yellow}\nKilling any found Discord processes.${default}"
+  echo -e "${yellow}\nKilling any found Discord processes.${default}"
 
-    processNames=("Discord" "DiscordPTB" "DiscordCanary")
+  processNames=("Discord" "DiscordPTB" "DiscordCanary")
 
-    absolutePath=$(pwd)/$process_path_file
-    > "$absolutePath"
+  absolutePath=$(pwd)/$process_path_file
+  > "$absolutePath"
 
-    for processName in "${processNames[@]}"; 
-    do
-        processPath=$(powershell.exe -Command "& {Get-Process -Name $processName -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty Path}")
+  for processName in "${processNames[@]}"; 
+  do
+    processPath=$(powershell.exe -Command "& {Get-Process -Name $processName -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty Path}")
 
-        if [ -n "$processPath" ]; then
-            echo "$processPath" >> "$absolutePath"
-        fi
+    if [ -n "$processPath" ]; then
+      echo "$processPath" >> "$absolutePath"
+    fi
 
-        powershell.exe -Command "& {Get-Process -Name $processName -ErrorAction SilentlyContinue | Stop-Process}"
-    done
+    powershell.exe -Command "& {Get-Process -Name $processName -ErrorAction SilentlyContinue | Stop-Process}"
+  done
 }
 
 launchProcess() {
-    absolutePath=$1
+  absolutePath=$1
 
-    if [ -f "$absolutePath" ]; then
-        while IFS= read -r processPath; do
-            if [ -n "$processPath" ]; then
-                start "$processPath"
-            else
-                echo "Process path is empty."
-            fi
-        done < "$absolutePath"
-        rm "$absolutePath"
-    else
-        echo "Process path file not found."
-    fi
+  if [ -f "$absolutePath" ]; then
+    while IFS= read -r processPath; do
+      if [ -n "$processPath" ]; then
+        start "$processPath"
+      else
+        echo "Process path is empty."
+      fi
+    done < "$absolutePath"
+    rm "$absolutePath"
+  else
+    echo "Process path file not found."
+  fi
 }
 
 main() {
