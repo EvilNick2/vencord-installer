@@ -1,6 +1,6 @@
 #!/bin/bash
 
-currentVersion="1.1.6"
+currentVersion="1.1.7"
 
 OS="$(uname -s)"
 case "$OS" in
@@ -61,30 +61,31 @@ checkAndUpdateScript
 
 downloadPlugins() {
 	declare userpluginsRepo=(
-		https://github.com/ImpishMoxxie/SoundBoardLogger
-		https://github.com/pernydev/DontLeak
-		https://github.com/nyakowint/vcNarrator-custom
-		https://github.com/Syncxv/vc-timezones
-		https://github.com/ethan-davies/ToastNotificationsMerge/
-		https://github.com/nyakowint/replaceActivityTypes
-		https://github.com/Syncxv/vc-message-logger-enhanced
-		https://github.com/D3SOX/vc-betterActivities
-		https://github.com/D3SOX/vc-blockKrisp
-		https://github.com/D3SOX/vc-followUser
-		https://github.com/D3SOX/vc-ignoreTerms
-		https://github.com/D3SOX/vc-mediaPlaybackSpeed
-		https://github.com/D3SOX/vc-notifyUserChanges
-		https://github.com/D3SOX/vc-serverProfilesToolbox
-		https://github.com/D3SOX/vc-silentTypingEnhanced
-		https://github.com/D3SOX/vc-voiceChatUtilities
-		https://github.com/hauntii/vencord-steamStatusSync
+		https://github.com/ImpishMoxxie/SoundBoardLogger.git
+		https://github.com/pernydev/DontLeak.git
+		https://github.com/nyakowint/vcNarrator-custom.git
+		https://github.com/Syncxv/vc-timezones.git
+		https://github.com/ethan-davies/ToastNotificationsMerge.git
+		https://github.com/nyakowint/replaceActivityTypes.git
+		https://github.com/Syncxv/vc-message-logger-enhanced.git
+		https://github.com/D3SOX/vc-betterActivities.git
+		https://github.com/D3SOX/vc-blockKrisp.git
+		https://github.com/D3SOX/vc-followUser.git
+		https://github.com/D3SOX/vc-ignoreTerms.git
+		https://github.com/D3SOX/vc-mediaPlaybackSpeed.git
+		https://github.com/D3SOX/vc-notifyUserChanges.git
+		https://github.com/D3SOX/vc-serverProfilesToolbox.git
+		https://github.com/D3SOX/vc-silentTypingEnhanced.git
+		https://github.com/D3SOX/vc-voiceChatUtilities.git
+		https://github.com/hauntii/vencord-steamStatusSync.git
 		https://github.com/EvilNick2/keyboardSounds.git
 		https://github.com/fres621/vencord-whos-watching.git
 	)
 
 	for pkg in ${userpluginsRepo[@]}; do
+		repoName=$(basename $pkg .git)
 		echo -e "${yellow}\n=================================="
-		echo -e " Downloading ${pkg} "
+		echo -e " Downloading ${repoName} "
 		echo -e "==================================${default}"
 		sleep 1
 		git clone -q $pkg
@@ -95,8 +96,9 @@ downloadPlugins() {
 	)
 
 	for pkg in ${userpluginsWget[@]}; do
+		fileName=$(basename $pkg .ts)
 		echo -e "${yellow}\n=================================="
-		echo -e " Downloading ${pkg} "
+		echo -e " Downloading ${fileName} "
 		echo -e "==================================${default}"
 		sleep 1
 		curl -OSs $pkg
@@ -127,15 +129,15 @@ downloadThemes() {
 
 	themesDir="$HOME/.config/Vencord/themes"
 
-	for theme in ${themesRepo[@]}; do
-		echo -e "${yellow}\n=================================="
-		echo -e " Downloading ${theme} "
-		echo -e "==================================${default}"
-		sleep 1
-		mkdir -p "$themesDir"
-		filename=$(basename "$theme")
-		curl -o "$themesDir/$filename" -sS "$theme"
-	done
+  for theme in ${themesRepo[@]}; do
+		themeName=$(basename $theme .theme.css)
+    echo -e "${yellow}\n=================================="
+    echo -e " Downloading ${themeName} "
+    echo -e "==================================${default}"
+    sleep 1
+    mkdir -p "$themesDir"
+    curl -o "$themesDir/$themeName.theme.css" -sS "$theme"
+  done
 }
 
 killProcess() {

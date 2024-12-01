@@ -36,6 +36,7 @@ jobs:
           files: |
             vencord-windows.sh
             vencord-linux.sh
+            windows-setup.bat
           tag_name: ${{ env.VERSION }}
           name: Vencord Installer ${{ env.VERSION }}
           draft: false
