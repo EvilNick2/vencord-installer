@@ -18,19 +18,39 @@ jobs:
           VERSION=$(grep 'currentVersion=' vencord-windows.sh | cut -d '"' -f 2)
           echo "Extracted version: $VERSION"
           echo "VERSION=$VERSION" >> $GITHUB_ENV
-      
+
+      - name: Get previous version
+        id: get_prev_version
+        run: |
+          PREV_VERSION=$(git tag --sort=-v:refname | head -n 1 | sed 's/^v//')
+          echo "Previous version: $PREV_VERSION"
+          echo "PREV_VERSION=$PREV_VERSION" >> $GITHUB_ENV
+
+      - name: Check if version has changed
+        id: version_check
+        run: |
+          if [ "$VERSION" = "$PREV_VERSION" ]; then
+            echo "Version has not changed. Exiting."
+            exit 0
+          else
+            echo "Version has changed. Continuing."
+          fi
+
       - name: Configure Git
+        if: steps.version_check.outcome == 'success'
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
       
       - name: Create and Push Tag
+        if: steps.version_check.outcome == 'success'
         run: |
           TAG="v${VERSION}"
           git tag $TAG
           git push origin $TAG
 
       - name: Create Release and Upload Asset
+        if: steps.version_check.outcome == 'success'
         uses: softprops/action-gh-release@v2
         with:
           files: |
