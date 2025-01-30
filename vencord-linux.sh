@@ -1,6 +1,6 @@
 #!/bin/bash
 
-currentVersion="1.1.7"
+currentVersion="1.1.8"
 
 OS="$(uname -s)"
 case "$OS" in
@@ -61,7 +61,7 @@ checkAndUpdateScript
 
 downloadPlugins() {
 	declare userpluginsRepo=(
-		https://github.com/ImpishMoxxie/SoundBoardLogger.git
+		# https://github.com/ImpishMoxxie/SoundBoardLogger.git
 		https://github.com/pernydev/DontLeak.git
 		https://github.com/nyakowint/vcNarrator-custom.git
 		https://github.com/Syncxv/vc-timezones.git
@@ -92,7 +92,7 @@ downloadPlugins() {
 	done
 
 	declare userpluginsWget=(
-		https://raw.githubusercontent.com/exhq/uwuifier-vencord/main/uwuifier.ts
+		# https://raw.githubusercontent.com/exhq/uwuifier-vencord/main/uwuifier.ts
 	)
 
 	for pkg in ${userpluginsWget[@]}; do
