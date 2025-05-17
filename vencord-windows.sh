@@ -1,6 +1,6 @@
 #!/bin/bash
 
-currentVersion="1.2.1"
+currentVersion="1.2.2"
 
 OS="$(uname -s)"
 case "$OS" in
@@ -132,6 +132,8 @@ installVencord() {
 downloadThemes() {
   declare themesRepo=(
 		https://raw.githubusercontent.com/EvilNick2/vencord/main/themes/Spotify-Discord-Nick.theme.css
+		https://raw.githubusercontent.com/EvilNick2/vencord/refs/heads/main/themes/Fluent-In-Guts.theme.css
+		https://raw.githubusercontent.com/EvilNick2/vencord/refs/heads/main/themes/Fluent-In-Memories.theme.css
   )
 
   themesDir="$APPDATA/Vencord/themes"

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-currentVersion="1.2.1"
+currentVersion="1.2.2"
 
 OS="$(uname -s)"
 case "$OS" in
