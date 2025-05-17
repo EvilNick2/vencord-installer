@@ -1,6 +1,6 @@
 #!/bin/bash
 
-currentVersion="1.2.0"
+currentVersion="1.2.1"
 
 OS="$(uname -s)"
 case "$OS" in
@@ -127,9 +127,15 @@ installVencord() {
 downloadThemes() {
 	declare themesRepo=(
 		https://raw.githubusercontent.com/EvilNick2/vencord/main/themes/Spotify-Discord-Nick.theme.css
+		https://raw.githubusercontent.com/EvilNick2/vencord/refs/heads/main/themes/Fluent-In-Guts.theme.css
+		https://raw.githubusercontent.com/EvilNick2/vencord/refs/heads/main/themes/Fluent-In-Memories.theme.css
 	)
 
 	themesDir="$HOME/.config/Vencord/themes"
+
+	if [ ! -d "$themesDir" ]; then
+		mkdir -p "$themesDir"
+	fi
 
   for theme in ${themesRepo[@]}; do
 		themeName=$(basename $theme .theme.css)
@@ -137,7 +143,6 @@ downloadThemes() {
     echo -e " Downloading ${themeName} "
     echo -e "==================================${default}"
     sleep 1
-    mkdir -p "$themesDir"
     curl -o "$themesDir/$themeName.theme.css" -sS "$theme"
   done
 }

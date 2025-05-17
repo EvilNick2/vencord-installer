@@ -1,6 +1,6 @@
 #!/bin/bash
 
-currentVersion="1.2.0"
+currentVersion="1.2.1"
 
 OS="$(uname -s)"
 case "$OS" in
@@ -136,13 +136,16 @@ downloadThemes() {
 
   themesDir="$APPDATA/Vencord/themes"
 
+	if [ ! -d "$themesDir" ]; then
+		mkdir -p "$themesDir"
+	fi
+
   for theme in ${themesRepo[@]}; do
 		themeName=$(basename $theme .theme.css)
     echo -e "${yellow}\n=================================="
     echo -e " Downloading ${themeName} "
     echo -e "==================================${default}"
     sleep 1
-    mkdir -p "$themesDir"
     curl -o "$themesDir/$themeName.theme.css" -sS "$theme"
   done
 }
