@@ -1,6 +1,6 @@
 #!/bin/bash
 
-currentVersion="1.2.3"
+currentVersion="1.2.4"
 
 OS="$(uname -s)"
 case "$OS" in
@@ -131,19 +131,19 @@ installVencord() {
 
 downloadThemes() {
   declare themesRepo=(
-		https://raw.githubusercontent.com/EvilNick2/vencord/main/themes/Spotify-Discord-Nick.theme.css
-		https://raw.githubusercontent.com/EvilNick2/vencord/refs/heads/main/themes/Fluent-In-Guts.theme.css
-		https://raw.githubusercontent.com/EvilNick2/vencord/refs/heads/main/themes/Fluent-In-Memories.theme.css
+    https://raw.githubusercontent.com/EvilNick2/vencord/main/themes/Spotify-Discord-Nick.theme.css
+    https://raw.githubusercontent.com/EvilNick2/vencord/refs/heads/main/themes/Fluent-In-Guts.theme.css
+    https://raw.githubusercontent.com/EvilNick2/vencord/refs/heads/main/themes/Fluent-In-Memories.theme.css
   )
 
   themesDir="$APPDATA/Vencord/themes"
 
-	if [ ! -d "$themesDir" ]; then
-		mkdir -p "$themesDir"
-	fi
+  if [ ! -d "$themesDir" ]; then
+    mkdir -p "$themesDir"
+  fi
 
-  for theme in ${themesRepo[@]}; do
-		themeName=$(basename $theme .theme.css)
+  for theme in "${themesRepo[@]}"; do
+    themeName=$(basename "$theme" .theme.css)
     echo -e "${yellow}\n=================================="
     echo -e " Downloading ${themeName} "
     echo -e "==================================${default}"
