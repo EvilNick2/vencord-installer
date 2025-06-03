@@ -1,6 +1,6 @@
 #!/bin/bash
 
-currentVersion="1.2.2"
+currentVersion="1.2.3"
 
 OS="$(uname -s)"
 case "$OS" in
@@ -116,7 +116,7 @@ installVencord() {
 	git clone https://github.com/Vendicated/Vencord.git
 	cd Vencord
 
-	npm i -g pnpm@10.4.1
+	npm i -g pnpm
 	pnpm install
 	pnpm build
 
