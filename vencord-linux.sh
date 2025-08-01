@@ -1,6 +1,6 @@
 #!/bin/bash
 
-currentVersion="1.2.4"
+currentVersion="1.2.5"
 
 OS="$(uname -s)"
 case "$OS" in
@@ -67,7 +67,7 @@ downloadPlugins() {
 		https://github.com/pernydev/DontLeak.git
 		https://github.com/nyakowint/vcNarrator-custom.git
 		https://github.com/Syncxv/vc-timezones.git
-		https://github.com/ethan-davies/ToastNotificationsMerge.git
+		# https://github.com/ethan-davies/ToastNotificationsMerge.git
 		https://github.com/nyakowint/replaceActivityTypes.git
 		https://github.com/Syncxv/vc-message-logger-enhanced.git
 		https://github.com/D3SOX/vc-betterActivities.git
@@ -125,26 +125,26 @@ installVencord() {
 }
 
 downloadThemes() {
-  declare themesRepo=(
-    https://raw.githubusercontent.com/EvilNick2/vencord/main/themes/Spotify-Discord-Nick.theme.css
-    https://raw.githubusercontent.com/EvilNick2/vencord/refs/heads/main/themes/Fluent-In-Guts.theme.css
-    https://raw.githubusercontent.com/EvilNick2/vencord/refs/heads/main/themes/Fluent-In-Memories.theme.css
-  )
+    declare themesRepo=(
+        https://raw.githubusercontent.com/EvilNick2/vencord/main/themes/Spotify-Discord-Nick.theme.css
+        https://raw.githubusercontent.com/EvilNick2/vencord/refs/heads/main/themes/Fluent-In-Guts.theme.css
+        https://raw.githubusercontent.com/EvilNick2/vencord/refs/heads/main/themes/Fluent-In-Memories.theme.css
+    )
 
-  themesDir="$APPDATA/Vencord/themes"
+    themesDir="$APPDATA/Vencord/themes"
 
-  if [ ! -d "$themesDir" ]; then
-    mkdir -p "$themesDir"
-  fi
+    if [ ! -d "$themesDir" ]; then
+        mkdir -p "$themesDir"
+    fi
 
-  for theme in "${themesRepo[@]}"; do
-    themeName=$(basename "$theme" .theme.css)
-    echo -e "${yellow}\n=================================="
-    echo -e " Downloading ${themeName} "
-    echo -e "==================================${default}"
-    sleep 1
-    curl -o "$themesDir/$themeName.theme.css" -sS "$theme"
-  done
+    for theme in "${themesRepo[@]}"; do
+        themeName=$(basename "$theme" .theme.css)
+        echo -e "${yellow}\n=================================="
+        echo -e " Downloading ${themeName} "
+        echo -e "==================================${default}"
+        sleep 1
+        curl -o "$themesDir/$themeName.theme.css" -sS "$theme"
+    done
 }
 
 killProcess() {
